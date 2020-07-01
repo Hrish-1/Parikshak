@@ -1,0 +1,159 @@
+This problem requires you to monitor a tree for violation of the AVL balance criteria as the tree is being constructed.
+
+The input to the program consists of a sequence of numbers. As you read in each number, check where the node is going to be inserted into the current tree. [At the start, the tree is empty.] If that insertion can cause the balance of any of the nodes in the tree to go beyond what is allowed by the AVL criteria, DO NOT add the number into the tree.  Instead, print out the number into the standard output.
+
+Numbers which retain the AVL property of the tree should be added to the tree at the appropriate place as per the method discussed in class. Continue with the remaining numbers. Please note that you do not have to do any balancing of the tree! The input is terminated by –1.
+
+The output from the program consists of the numbers rejected by the program. At the end, you should also print out the count of such numbers rejected.
+
+if no number is rejected print '0' 
+
+
+Hint: It would help to keep the height of the left and right subtrees of each node along with the node. Also note that the process of checking for violation and actually inserting are quite similar; in the former case you do not update anything but do everything else. This observation can be used to write the code.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<math.h>
+
+using namespace std;
+
+class Node
+    {
+         private :
+                    int data;
+                    Node *left;
+                    Node *right;
+         public :
+                   Node(){
+                      left = NULL;
+                      right = NULL;
+                   }
+                  Node(int data){
+                      this->data = data;
+                      left = NULL;
+                      right = NULL;
+                  }
+                  void setdata(int data){
+                       this->data = data;
+                       left = right = NULL;
+                  }
+                  int getdata(){
+                      return data;
+                  }
+                  void setleft(Node* left){
+                      this->left=left;
+                  }
+                  void setright(Node* right){
+                      this->right=right;
+                  }
+                  Node* getleft(){
+                      return left;
+                  }
+                  Node* getright(){
+                      return right;
+                  }
+    };
+    
+class BST
+     {
+          private:
+                   Node* root;
+                   int avlvio;
+          public:
+                  BST(){
+                         root = NULL;
+                         avlvio = 0;
+                  }
+                  Node* getroot(){
+                        return this->root;   
+                  }
+                  int getvioAVL(){
+                        return avlvio;
+                  }
+                  int height(Node* temp){
+                      if(temp == NULL){
+                          return 0;
+                      }
+                    return max(height(temp->getleft()),height(temp->getright())) + 1;      
+                  }
+                  Node* findAVL(Node* root){
+                         
+                         if(root!=NULL){
+                             int bf = height(root->getleft()) - height(root->getright());
+                             if(bf<0)
+                                   bf = -bf;
+                             if(bf>1)
+                                   return root;
+                             Node* node = findAVL(root->getleft());
+                             if(node !=NULL)
+                                   return node;
+                             node = findAVL(root->getright());
+                             if(node!=NULL)
+                                return node;
+                         }
+                      return NULL;     
+                  }
+                  int AVLvio(){
+                        Node* node = findAVL(root);
+                        if(node==NULL)
+                            return 0;
+                        else
+                            return 1;
+                  }
+                  void insertData(int data){
+                         Node* newnode = new Node(data);
+                         if(root == NULL){
+                                root = newnode;
+                         }
+                         else{
+                                Node* temp1;
+                                Node* temp2;
+                                temp1 = root;
+                                temp2 = NULL;
+                                
+                                while(temp1!=NULL){
+                                         temp2 = temp1;
+                                         if(data < temp1->getdata())
+                                            temp1 = temp1->getleft();
+                                         else if(data > temp1->getdata())
+                                            temp1 = temp1->getright();
+                                         else{
+                                              break;  
+                                         }        
+                                }
+                               if(data < temp2->getdata()){
+                                       temp2->setleft(newnode);
+                                       if(AVLvio()){
+                                                 avlvio++;
+                                                 temp2->setleft(NULL);
+                                                 cout<<data<<" ";
+                                       }
+                               }
+                               else if(data > temp2->getdata()){
+                                           temp2->setright(newnode);
+                                           if(AVLvio()){
+                                               avlvio++;
+                                               temp2->setright(NULL);
+                                               cout<<data<<" ";
+                                           }
+                               }
+                                else
+                                   return;
+                                  
+                         }
+                  }
+     };
+
+int main(){
+    BST b1;
+    int cmd = 1;
+    
+    while(cmd!=-1){
+        
+          cin>>cmd;
+          if(cmd!=-1)
+              b1.insertData(cmd);
+    }
+    cout<<b1.getvioAVL()<<endl;
+    return 0;
+}

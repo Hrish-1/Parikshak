@@ -1,0 +1,59 @@
+#include<iostream>
+using namespace std;
+static char maze[20][20];
+int Row,Column;
+int count;
+static int visited[20][20];
+int process(int a,int b){
+    if(a> Row || b> Column){
+        return 0;
+    }
+    if(maze[a][b] == '@'){
+        return 1;
+    }
+    if(a< Row && b< Column && visited[a][b]==0 && (maze[a][b]== '1' || maze[a][b]=='#')){
+        
+        visited[a][b] = 1;
+        if(process(a+1,b)){
+            count++;
+            return 1;
+        }
+        if(process(a,b+1)){
+            count++;
+            return 1;
+        }
+        if(process(a-1,b)){
+            count++;
+            return 1;
+        }
+        if(process(a,b-1)){
+            count++;
+            return 1;
+        }
+        else 
+            return 0;
+    }
+    return 0;
+}
+
+int main(){
+    int i,j,R,C,a,b;
+    cin>>R;
+    cin>>C;
+    Row = R;
+    Column = C;
+    for(i=0;i<R;i++){
+        for(j=0;j<C;j++){
+            cin>>maze[i][j];
+            if(maze[i][j]=='#'){
+                
+                a=i;
+                b=j;
+            }
+        }
+    }
+    if(process(a,b)){
+        cout<<count<<endl;
+    }
+    return 0;
+}

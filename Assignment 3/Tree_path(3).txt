@@ -1,0 +1,156 @@
+Write a Java program to create a binary search tree, where a left child node is always less than its parent node and a right child node is always greater than the parent node. Create a tree by taking input of positive integers. Once the tree is created search a particular value in the tree and print the search path starting from root. Assume that the keys in all nodes are unique.
+
+              20
+
+            /     \
+
+       15       27
+
+      /           /     \
+
+ 12        24       29               
+
+fig1.
+
+In the Fig 1. tree search path as following for given node
+
+20 => Root
+
+24 => Root R L
+
+25 => Not found
+
+12 => Root L L
+
+Note: R is for right, L is for Left
+---------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+using namespace std;
+class Node{
+    Node* right;
+    Node* left;
+    int data;
+public:
+    Node(int data){
+        this->data=data;
+        left=NULL;
+        right=NULL;
+    }
+    int getdata(){
+        return data;
+    }
+    void setright(Node *right){
+        this->right=right;
+    }
+    void setleft(Node *left){
+        this->left=left;
+    }
+    Node* getleft(){
+        return left;
+    }
+    Node* getright(){
+        return right;
+    }
+};
+class ptree{
+    Node* root;
+public:
+    ptree(){
+        root=NULL;
+    }
+    void insert(int data){
+        Node *node=new Node(data);
+        if(root==NULL){
+            root=node;
+        }
+        else{
+              Node *temp;
+              Node *prev;
+              temp=root;
+              while(temp!=NULL){
+                  prev=temp;
+                  if(data<=temp->getdata()){
+                      temp=temp->getleft();
+                  }
+                  else
+                      temp=temp->getright();
+              }
+              if(data<=prev->getdata()){
+                  prev->setleft(node);
+              }
+              else
+                   prev->setright(node);
+        }
+    }
+    int search(int data){
+        Node *temp;
+        temp=root;
+        if(root==NULL){
+            return 0;
+        }
+        else if(temp->getdata()==data){
+            return 1;
+        }
+        else{
+            while(temp!=NULL){
+                if(data<temp->getdata()){
+                    temp=temp->getleft();
+                }
+                else if(data>temp->getdata()){
+                    temp=temp->getright();
+                }
+                else if(data==temp->getdata()){
+                    return 1;
+                }
+            }
+            if(temp==NULL){
+                return 0;
+            }
+        }
+    }
+    void path(int data){
+        int s;
+        s=search(data);
+        if(!s){
+            cout<<"Not Found"<<endl;
+        }
+        else if(s){
+            Node *temp=root;
+            cout<<"Root"<<" ";
+            while(temp!=NULL){
+                if(data<temp->getdata()){
+                    temp=temp->getleft();
+                    cout<<"L"<<" ";
+                }
+                else if(data>temp->getdata()){
+                     temp=temp->getright();
+                     cout<<"R"<<" ";
+                }
+                else if(data==temp->getdata()){
+                    cout<<endl;
+                    break;
+                }
+            }
+            
+        }
+    }
+    
+};
+int main(){
+    ptree p;
+    int n;
+    while(1){
+        cin>>n;
+        if(n==-1)
+           break;
+            p.insert(n);
+    }
+    cin>>n;
+    while(n--){
+        int data;
+        cin>>data;
+        p.path(data);
+    }
+    return 0;
+}

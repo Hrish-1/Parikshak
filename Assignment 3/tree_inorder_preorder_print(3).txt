@@ -1,0 +1,116 @@
+Given a list of integers, you will need to write a C++ program to construct a binary search tree (left sub tree is less than the right subtree). After constructing the binary search tree do an inorder traversal and preorder traversal. Find the positions where node value is same in both the positions.
+
+This checking can be done by storing inorder traversal & preorder traversals of the tree in two separate arrays. 
+
+---------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+using namespace std;
+class Node{
+        Node *left;
+        Node *right;
+        int data;
+public:
+        Node(int data){
+            this->data=data;
+            right=NULL;
+            left=NULL;
+            
+        }
+        int getdata(){
+            return data;
+        }
+        void setleft(Node* left){
+            this->left=left;
+        }
+        void setright(Node* right){
+            this->right=right;
+        }
+        Node* getright(){
+            return right;
+        }
+        Node* getleft(){
+            return left;
+        }
+};
+class Tree{
+    Node *root;
+    int i,j;
+    int n;
+    int *a,*b;
+    
+public:
+        Tree(int size,int size1){
+            i=j=1;
+            n=0;
+            root=NULL;
+            a=new int[size];
+            b=new int[size1];
+            
+        }
+       void insert(int data){
+           Node *node=new Node(data);
+           if(root==NULL)
+              root=node;
+           else{
+                 Node *temp,*prev;
+                 temp=root;
+                 prev=NULL;
+                 while(temp!=NULL){
+                    prev=temp;
+                   if(data<=temp->getdata())
+                        temp=temp->getleft();
+                    else
+                        temp=temp->getright();
+                 }
+                 if(data<=prev->getdata())
+                      prev->setleft(node);
+                 else
+                      prev->setright(node);
+           }
+           n++;
+        }
+        void inorder(Node *temp){
+            if(temp==NULL)
+               return;
+            else{
+                   inorder(temp->getleft());
+                   a[i++]=temp->getdata();
+                   inorder(temp->getright());
+            }
+              
+        }
+        void preorder(Node *temp){
+            if(temp==NULL)
+               return;
+            else{
+                  b[j++]=temp->getdata();
+                  preorder(temp->getleft());
+                  preorder(temp->getright());
+            }   
+        }
+        Node* getroot(){
+            return root;
+        }
+        void compare(){
+            inorder(getroot());
+            preorder(getroot());
+            for(int i=1;i<=n;i++){
+                if(a[i]==b[i])
+                 cout<<i<<" "<<a[i]<<endl;
+            }
+        }
+};
+int main(){
+    Tree T(20,20);
+    int n;
+    while(1){
+        cin>>n;
+        if(n==-1){
+           break;}
+        else
+           T.insert(n);
+    }
+    T.compare();
+    return 0;
+}

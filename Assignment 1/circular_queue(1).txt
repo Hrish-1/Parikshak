@@ -1,0 +1,91 @@
+Implement a circular queue in c++/java, to support "enque" and "deque" operation of a given size. Your program should support following commands as given below:
+
+enque N              // insert N in the Queue, if queue is full print the output as "FULL' 
+deque                 // Remove the first elements from the Queue and print the value if the Queue is empty print "EMPTY" 
+exit                     // exit the program 
+ assume the input will be always a positive integer.
+
+ ----------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+class cqueue{
+    private:
+     int front;
+     int rear;
+     int size;
+     int *store;
+     
+     public:
+     cqueue(int size)
+     {
+         this->size=size;
+         rear=front=-1;
+         store=new int[size];
+     }
+     ~cqueue()
+     {
+         delete[] store;
+     }
+     int isFull()
+     {
+         if(rear==(size-1)&&front==-1)
+             return 1;     
+         return 0;
+     }
+     int isEmpty()
+     {
+         if(rear==-1)
+         {
+           return 1;
+         }  
+         else
+           return 0;
+     }
+     void enque(int data){
+         rear=(rear+1)%size;
+         store[rear]=data;
+     }
+     int deque(){
+         int data;
+         front=(front+1)%size;
+         data=store[front];
+         if(front==rear){
+           front=rear=-1;
+         } 
+         return data;  
+     }
+};
+int main(){
+    int n;
+    cin>>n;
+    cqueue q(n);
+    string s;
+    while(1){
+        cin>>s;
+        if(s=="exit")
+         break;
+        if(s=="enque"){
+            int data;
+            cin>>data;
+            if(!q.isFull()){
+              q.enque(data);
+            }  
+            else{  
+              cout<<"FULL"<<endl;
+            }  
+        }
+        if(s=="deque"){
+            if(!q.isEmpty()){
+              cout<<q.deque()<<endl;
+            }   
+            else{
+              cout<<"EMPTY"<<endl;
+            
+            }  
+        }
+     }
+   return 0;
+}
+    

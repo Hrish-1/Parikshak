@@ -1,0 +1,88 @@
+SERVICE COUNTER
+Consider a service counter. People waiting for service form a queue. At the start, the queue is empty and time is 0. The service time per person is 3 minutes.
+
+Your program must simulate the queue and print out the following:
+
+The number of customers waiting in the queue at time = N minutes from the start of simulation.
+The arrival times of the customers in the queue at that time, in increasing order.
+
+Each integer must be separated by a space. Terminate your output with a newline character.
+
+For doing the computation, you can assume that if the counter is expected to be vacant at time t,
+the first person in the queue will be scheduled for service, before the counting is done for time t.
+You must use the queue data structure to solve this problem.
+
+------------------------------------------------------------------------------------------
+#include<iostream>
+using namespace std;
+class queue{
+      private:
+              int front,rear,size;
+              int *store;
+      public:
+              queue(int size){
+                  this->size=size;
+                  front=rear=-1;
+                  store=new int[size];
+              }
+              int isempty(){
+                  if(rear==-1&&front==-1||(front>rear))
+                     return 1;
+                  else
+                     return 0;
+                      
+              }
+              int isfull(){
+                  if(rear==(size-1))
+                     return 1;
+                  else
+                     return 0;
+              }
+              void enqueue(int data){
+                  if(!isfull()){
+                      rear++;
+                      store[rear]=data;
+                      if(front==-1)
+                         front=0;
+                  }
+              }
+              void dequeue(){
+                  if(!isempty()){
+                      front++;  
+                  }
+              }
+              int compare(){
+                  if(front==rear)
+                  return 0;
+                  return 1;
+              }
+              void print(){
+                  cout<<(rear-front)<<" ";
+                  do{
+                      front++;
+                      cout<<store[front]<<" ";
+                  }while(front!=rear);
+              }
+};
+int main(){
+    queue q(20);
+    int c_time=0;
+    int time,a_time;
+    cin>>time;
+    while(1){
+        cin>>a_time;
+        if(a_time==0||a_time>-1&&a_time<=time)
+        q.enqueue(a_time);
+        if(a_time==-1)
+          break;
+        while(c_time<=a_time){
+            if((c_time+1)%3==0&&c_time<=time&&(q.compare())){
+                q.dequeue();
+            }
+        c_time++;
+        }
+    }
+    q.print();
+    return 0;
+}
+

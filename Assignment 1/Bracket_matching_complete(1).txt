@@ -1,0 +1,133 @@
+Brackets are tall punctuation marks used in matched pairs within text, to set apart or interject other text. Brackets refer to different types of brackets in different parts of the world and in different contexts.
+
+Write a program which reads a String, which consists of alphabets [a-z, A-Z] and 3 types of brackets listed below:
+
+Parentheses - ()
+
+Square brackets - []
+
+Braces or Curly brackets - {}
+
+And determine whether every open bracket has a matching close bracket. If any open/close bracket doesn’t have a matching close/open bracket or any extra open/close bracket then it is to be treated as invalid string.
+
+Following are 3 examples of valid string:
+
+(the[is]{valid})
+
+{the(is[valid])}
+
+(this)(is)(valid)
+
+Following are 4 examples of invalid string:
+
+(the[is]{invalid))
+
+(the[is]{invalid}}
+
+(this](is}{invalid)
+
+[this]{is}(invalid))
+
+-------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+using namespace std;
+template<class T>
+class stack
+{
+  private:
+   int top;
+   T *store;
+   int size;
+  public:
+   stack(){
+       top=-1;
+       size=0;
+       
+   }
+   
+   stack(int size){
+     this->size=size;
+     top=-1;
+     store=new T[size];
+   }
+   int isfull(){
+     if(top==size-1){
+     return 1;
+   }
+   return 0;
+   }
+   int isempty(){
+       if(top==-1){
+           return 1;
+       }
+       return 0;
+   }
+   T Top(){
+       
+       return store[top];
+   }
+   void push(T data){
+     if(!isfull())
+     top++;
+     store[top]=data;
+   }
+   void pop(){
+       if(!isempty())
+       top--;
+
+   }
+};
+int main()
+{
+    
+    int n,i;
+    string e;
+    cin>>n;
+    while(n--){
+            int cpush=0;
+            int cpop=0;
+            stack<char>s(30);
+            cin>>e;
+        for(i=0;i<=e.length();i++){
+                 if(e[i]=='{'||e[i]=='['||e[i]=='('){
+                 s.push(e[i]);
+                 cpush++;
+                 }
+                 else if(e[i]=='}'||e[i]==')'||e[i]==']'||e[i]=='\0'){
+                     if(e[i]=='}'&&s.Top()=='{'){
+                     s.pop();
+                     cpop++;
+                     }
+                     else if(e[i]==')'&&s.Top()=='('){
+                     s.pop();
+                     cpop++;
+                     }
+                     else if(e[i]==']'&&s.Top()=='['){
+                     s.pop();
+                     cpop++;
+                     }   
+                    else if(s.isempty()&&e[i]=='\0'){
+                    cout<<"VALID"<<endl;
+                    break;
+                    }
+                else{    
+                if(cpush>cpop && e[i]=='\0'){
+                cout<<"TOO MANY OPENING"<<endl;
+                break;
+                }
+                else if(e[i]!='\0' && s.isempty()){
+                cout<<"TOO MANY CLOSING"<<endl;
+                break;
+                }
+                else{
+                cout<<"MISSMATCH"<<endl;
+                break;
+                }
+                }
+                }    
+    }    
+    }
+    return 0;
+} 
+

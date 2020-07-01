@@ -1,0 +1,179 @@
+Write a program to manipulate linked lists. The input to the program will be a sequence of instructions of the following three categories:
+
+insert name age:  create a node with item as the info field and insert into the current list.
+remove N :  remove the Nth item from the list.
+print N :  print the Nth item from the list. The name should be printed first and then the age with a space in between.
+stop : end of instructions
+Each of the instructions occurs on a different line.
+
+The list should always be maintained in sorted order in increasing order of age. If there is more than one person of same age, the order should be as in the input. You may assume that the input is valid and correct.
+
+While executing remove or print, if the list does not have enough elements, the command should be ignored. You may assume that the name is always a single word with no spaces within. The age will be a positive integer. Terminate each line output with a newline character.
+
+--------------------------------------------------------------------------------------------------
+
+#include <iostream>
+using namespace std;
+class Node{
+          int age; 
+          string name;
+          Node *next;
+
+public:
+        Node(){
+          next=NULL;    
+        }
+        ~Node(){
+            next=NULL;
+        }
+        Node(int age,string name){
+            
+            this->age=age;
+            this->name=name;
+            this->next=NULL;
+        }
+        void setage(int age){
+            
+            this->age=age;
+        }
+        int getage(){
+            
+            return age;
+        }
+        void setname(string name){
+            this->name=name;
+        }
+        string getname(){
+            
+            return name;
+        }
+        Node* getnext(){
+            return next;
+        }
+        void setnext(Node *next){
+            
+            this->next=next;
+        }
+};
+class Linklist{
+    
+    Node* head;
+
+public:
+ Linklist(){
+     head=NULL;
+ }
+ 
+ void insert(string n,int a){
+     
+        Node* temp;
+        Node* temp1;
+        temp=head;
+        temp1=head;
+        Node *node=new Node;
+        node->setage(a);
+        node->setname(n);
+        node->setnext(NULL);
+    if(head==NULL){
+        head=node;
+    }
+    else{
+        while(temp->getnext()!=NULL&&temp->getage()<=a){
+            
+            temp1=temp;
+            temp=temp->getnext();
+        }
+        if(temp==head){
+            if(temp->getage()<=a){
+                
+                temp1->setnext(node);
+                node->setnext(NULL);
+            }
+            else{
+                node->setnext(head);
+                head=node;
+            }
+        }    
+        else if(temp->getnext()==NULL){
+            
+            if(temp->getage()<=a){
+                temp->setnext(node);
+                node->setnext(NULL);
+            }
+            else{
+                node->setnext(temp);
+                temp1->setnext(node);
+            }
+        }
+        else if(temp->getnext()!=NULL){
+            
+            node->setnext(temp);
+            temp1->setnext(node);
+        }
+    }
+    }
+ void remove(int c){
+     int i=1;
+     Node *temp,*temp1;
+     temp=head;
+     temp1=head;
+     if(c==1){
+         head=head->getnext();
+         temp=NULL;
+         temp1=NULL;
+     }
+     else{
+        while(i<c-1){
+         
+            temp=temp->getnext();
+            i++;
+        }
+         temp1=temp->getnext();
+         temp->setnext(temp1->getnext());
+         temp1->setnext(NULL);
+         temp1=NULL;
+         
+     }
+     
+ }
+ void print(int p){
+     int i=1;
+     Node* temp;
+     temp=head;
+     while(i<p){
+         i++;
+         temp=temp->getnext();
+     }
+         cout<<temp->getname()<<" "<<temp->getage()<<endl;
+ }
+ 
+ };
+int main(){
+    
+    Linklist l;
+    while(1){
+        string cmd;
+        cin>>cmd;
+        if(cmd=="insert"){
+            string name;
+            cin>>name;
+            int age;
+            cin>>age;
+            l.insert(name,age);
+        } 
+        if(cmd=="remove"){
+            int c;
+            cin>>c;
+            l.remove(c);
+        }
+        if(cmd=="print"){
+            int p;
+            cin>>p;
+            l.print(p);
+        }
+        if(cmd=="stop"){
+            break;
+        }
+    
+    }
+}

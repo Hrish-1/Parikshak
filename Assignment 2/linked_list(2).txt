@@ -1,0 +1,333 @@
+Write a program to create Link-List and different operations on it. The operation descriptions along with their code is given in the table below.
+
+Sr No
+
+Operation Code
+
+Operation Description
+
+1
+
+AB  
+
+Add the node at the beginning of the list.
+
+2
+
+PR
+
+Print the link-list from head to end of the list, each node separated by space and terminated by a newline.
+
+3
+
+AE  
+
+Add the node at the end of the list.
+
+4
+
+AMA  
+
+Add the node at the middle after a particular node.
+
+5
+
+AMB  
+
+Add the node at the middle before a particular node.
+
+6
+
+DN  
+
+Delete the node.
+
+ 
+
+7
+
+DNA  
+
+Delete the node after a particular node.
+
+8
+
+DNB  
+
+Delete the node before a particular node.
+
+9
+
+FPR
+
+Fancy Print of the link-list. Each node’s info printed, separated by (→),without any space in between and terminated by a newline. → symbol is hyphen (-) and arrow (>)
+
+10
+
+RPR
+
+Reverse Print of the link-list. Each node’s info printed, separated by space and terminated by a newline.
+
+Your program should take command as given above, corresponding input and perform the operations till the exit command is given. Assume that ‘node_info’ is a single integer 0 < node_info < 100
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+using namespace std;
+class Node{
+     private:
+      int data;
+      Node* next;
+      
+      public:
+      
+      Node(){
+          
+          next=NULL;
+      }
+      Node(int data){
+          this->data=data;
+          this->next=NULL;
+      }
+     ~Node(){
+          next=NULL;
+      }
+      
+      Node* getnext(){
+          return next;
+      }
+      void setnext(Node *next){
+           this->next=next;
+      }
+      int getdata(){
+          return data;
+      }
+      
+};
+class LL{
+    
+    private:
+    Node* head;
+    
+    public:
+    
+    LL(){
+        head=NULL;
+    }
+    void AB(int data){
+        
+        Node *node=new Node(data);
+        if(head==NULL){
+            head=node;
+        }
+        else{
+        node->setnext(head);
+        head=node;
+        }
+        
+    }
+    void AE(int data){
+        Node *node=new Node(data);
+        Node *temp;
+        if(head==NULL){
+             Node *node=new Node(data);
+            head=node;
+        }
+        else{
+            temp=head;
+            while(temp->getnext()!=NULL){
+                
+                temp=temp->getnext();
+            }
+             temp->setnext(node);
+        }
+           
+    }
+    
+    void print(){
+        
+        Node *temp=head;
+        while(temp!=NULL){
+              cout<<temp->getdata()<<endl;
+              temp=temp->getnext();
+        }
+    }
+   void AMA(int A,int T){
+       
+       Node *node=new Node(T);
+        Node *temp=head;
+        if(head==NULL){
+            head=node;
+        }
+        else{
+            while(temp->getdata()!=A&&temp->getnext()!=NULL){
+                
+                temp=temp->getnext();
+                
+            }
+            if(temp==NULL){
+                return;
+            }
+            if(temp->getnext()==NULL){
+                
+                temp->setnext(node);
+            }
+            else{
+            node->setnext(temp->getnext());
+            temp->setnext(node);
+            }
+        
+        }
+   }
+   void AMB(int B,int T){
+       Node *node=new Node(T);
+       Node *temp,*prev;
+       temp=head;
+       prev=temp;
+       if(head==NULL){
+           head=node;
+       }
+       if(head->getdata()==B){
+           node->setnext(head);
+           head=node;
+       }
+       else{
+       while(temp->getdata()!=B&&temp!=NULL){
+           
+           prev=temp;
+           temp=temp->getnext();
+       }
+       if(temp==NULL){
+           return;
+       }
+       else{
+        node->setnext(temp);
+       prev->setnext(node);
+       }
+       }
+   }
+   void Delete(int data){
+       Node *temp,*prev;
+       temp=head;
+       while(temp->getdata()!=data){
+           prev=temp;
+           temp=temp->getnext();
+       }
+       prev->setnext(temp->getnext());
+       delete temp;
+       
+   }
+   void DeleteA(int A){
+       Node *temp;
+       temp=head;
+       while(temp->getdata()!=A&&temp->getnext()!=NULL){
+           temp=temp->getnext();
+       }
+        if(temp->getnext()==NULL){
+           
+           return;
+       }
+       else{
+       
+      temp->setnext(temp->getnext()->getnext());
+       }
+   }
+   void DeleteB(int B){
+       Node *temp,*temp1;
+       temp=temp1=head;
+       if(head->getdata()==B){
+         return;}
+       if(head->getnext()->getdata()==B){
+          head=head->getnext();}
+           while(temp->getnext()->getdata()!=B&&temp->getnext()!=NULL){
+               temp1=temp;
+               temp=temp->getnext();
+           }
+           if(temp->getnext()==NULL){
+               return;
+           }
+           else{
+           temp1->setnext(temp->getnext());
+           
+       }      
+       
+   }
+    void Fprint(){
+        
+        Node *temp=head;
+        while(temp->getnext()!=NULL){
+              cout<<temp->getdata()<<"->";
+              temp=temp->getnext();
+        }
+        cout<<temp->getdata()<<endl;
+    }
+    void revprint(Node *temp){
+        if(temp==NULL){
+            return;
+        }
+        revprint(temp->getnext());
+        cout<<temp->getdata()<<" ";
+    }
+    Node* gethead(){
+        return head;
+    }
+};
+int main()
+{
+    string cmd;
+    LL L1;
+    while(1){
+        cin>>cmd;
+        if(cmd=="EXIT"){
+            break;
+        }
+        if(cmd=="AB"){
+            int data;
+            cin>>data;
+           L1.AB(data);
+        }
+        if(cmd=="AE"){
+            int data;
+            cin>>data;
+            L1.AE(data);
+        }
+        if(cmd=="PR"){
+            L1.print();
+        }
+        if(cmd=="AMA"){
+            int T,A;
+            cin>>A;
+            cin>>T;
+            L1.AMA(A,T);
+        }
+        if(cmd=="AMB"){
+            int B,T;
+            cin>>B;
+            cin>>T;
+            L1.AMB(B,T);
+        }
+        if(cmd=="DN"){
+            int data;
+            cin>>data;
+            L1.Delete(data);
+        }
+        if(cmd=="DNA"){
+            int data;
+            cin>>data;
+            L1.DeleteA(data);
+        }
+        if(cmd=="DNB"){
+            int data;
+            cin>>data;
+            L1.DeleteB(data);
+        }
+         if(cmd=="FPR"){
+            L1.Fprint();
+        }
+        if(cmd=="RPR"){
+            L1.revprint(L1.gethead());
+        }
+
+
+    }
+    return 0;
+}

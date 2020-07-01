@@ -1,0 +1,71 @@
+X is an array of N integers(no duplicates) to be sorted using the algorithm described below. The array is partitioned by finding the location J for the pivot-key. After partitioning, all the elements in the array at positions less than J are less than the pivot-key and all elements in the array at positions greater than J are greater than the pivot-key.
+
+The partitioning works as follows and the partitioning procedure gives the position J. Let LB and UB be the lower and upper bound of the sub-array respectively.
+
+Step I: The element at LB is exchanged with the element at the middle i.e. (LB+UB)/2 and an element X[LB] is chosen as the pivot-key and LB is chosen as initial pivot location.
+
+Step II: Scan the sub-array from i=LB+1 to i=UB. If X[i] < X[LB], increment the pivot location by one and then swap X[new pivot location] with X[i]
+
+Step III: The final pivot location is the position J required.
+
+Swap X[J] and X[LB] After performing steps 1 to 3, the two new sub-arrays are LB to J-1 and J+1 to UB.
+
+---------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+using namespace std;
+void sort(int x[],int lb,int ub,int N);
+void print(int x[],int N);
+
+int main(){
+    int N;
+    cin>>N;
+    int *a;
+    a=new int[N];
+    for(int i=0;i<N;i++){
+        cin>>a[i];
+    }
+    int lb=0;
+    int ub=N-1;
+    
+    sort(a,lb,ub,N);
+    return 0;
+}
+void sort(int x[],int lb,int ub,int N){
+    
+    if(lb>=ub)
+       return;
+    
+    int j=lb;
+    int i=lb+1;
+    
+    int k=(lb+ub)/2;
+    
+    int temp;
+    temp=x[lb];
+    x[lb]=x[k];
+    x[k]=temp;
+    
+    while(i<=ub){
+          if(x[i]<x[lb]){
+              j++;
+              int temp;
+              temp=x[j];
+              x[j]=x[i];
+              x[i]=temp;
+              }
+           i++;         
+    }
+    temp=x[j];
+    x[j]=x[lb];
+    x[lb]=temp;
+    print(x,N);
+    sort(x,lb,j-1,N);
+    sort(x,j+1,ub,N);
+}
+void print(int x[],int N){
+    for(int i=0;i<=N-1;i++){
+        cout<<x[i]<<" ";
+    }
+    cout<<endl;
+}
